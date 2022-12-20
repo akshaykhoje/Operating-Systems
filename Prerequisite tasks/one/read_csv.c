@@ -36,25 +36,50 @@ void read_file(const char *str){
     return;
 }
 
-int getSum(const char *str)   // total and average yet to be fixed
+double *getSum(const char *str, double A[])   // total and average yet to be fixed
 {
-    double addition;
+    double average, sum = 0;
     int total = 0;
-    double average;
     char buffer[BUFFER_SIZE];
     FILE *fptr = fopen(str, "r");
     
     while(fgets(buffer, BUFFER_SIZE, fptr) != NULL) {
-        addition += atof(buffer);         //sum of scores
+        sum += atof(buffer);         //sum of scores
         total++;
     }
 
-    average = addition/(double)total;     //avg value
-    printf("total : %d\naverage : %d\n", addition, average);
+    average = sum/total;     //avg value
+
+    A[0] = sum;
+    A[1] = average;
 
     fclose(fptr);
-    return addition;
+    return A;
 }
+
+
+// double *median(const char *str, int size, double *median_val) {
+//     double median_pos=0, read_val=0, count=0;
+//     median_pos = size/2;
+
+//     FILE *fptr = fopen(str, "r");
+//     while(fscanf(fptr, "%d", &read_val) == 1) {
+//         if(median_pos == count){
+//             *median_val = read_val;
+//         }
+//         if((median_pos += 1) == count) {
+//             if(size %2){
+//                 *median_val /= 2;
+//             }
+//             else{
+//                 *median_val += read_val;
+//                 *median_val /= 2;
+//             }
+//         }
+//         count++;
+//     }
+//     return median_val;
+// }
 
 
 int result(const char *str){
@@ -88,7 +113,14 @@ int result(const char *str){
     fclose(final_score);
     fclose(fptr);
 
-    int sum = getSum("marks.csv");
+    double arr[2];
+    double *sum_avg = getSum("marks.csv", &arr[0]);
+    printf("sum : %lf\n", sum_avg[0]);
+    printf("average : %lf\n", sum_avg[1]);
+
+    // double med_value; 
+    // median("marks.csv", 86, &med_value);         // 86 is the number of entries
+    // printf("median : %lf\n", med_value);
     
 
     //write the result
