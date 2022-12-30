@@ -55,15 +55,54 @@
 
 7. **lspci**
 
+- lspci  is  a  utility for displaying information about PCI buses in the system and devices connected to them.
+- Some parts of the output, especially in the highly verbose  modes,  are probably  intelligible only to experienced PCI hackers. For exact definitions of the fields, please consult either the PCI specifications  or the header.h and /usr/include/linux/pci.h include files.
+
+> lspci -v | grep -i nvidia
+>
+> lspci -v | grep -i sata
+
+<hr>
+
 8. **lsusb**
+
+- lsusb  is a utility for displaying information about USB buses in the system and the devices connected to them. It uses udev's hardware database to associate a full human-readable name to the vendor ID and the product ID.
+
+> lsusb --tree
+>
+> lsusb -s BusNum:DeviceNum
+
+<hr>
 
 9. **dmesg**
 
+- dmesg is used to examine or control the kernel ring buffer.
+    - *The kernel ring buffer is a data structure that records messages related to the operation of the kernel. A ring buffer is a special kind of buffer that is always a constant size, removing the oldest messages when new messages are received.*
+
+> sudo dmesg | grep -i usb
+>
+> sudo dmesg | grep -i sda
+> 
+> sudo dmesg -f syslog, daemon
+
+<hr>
+
 10. **mkfs**
+
+<hr>
 
 11. **fdisk**
 
+- fdisk  is  a  dialog-driven program for creation and manipulation of partition tables.
+- It understands GPT, MBR, Sun, SGI and BSD partition tables.
+
+> sudo fdisk -l
+
+<hr>
+
 12. **gparted**
+
+<hr>
 
 13. **apt install**
 
@@ -74,6 +113,7 @@
 >
 > sudo apt install ./procfetch_1.0_all.deb
 
+<hr>
 
 14. **apt-get source**
 
@@ -81,6 +121,8 @@
 - ***apt-get source*** causes apt-get to fetch source packages. APT will examine the available packages to decide which source package to fetch. It will then find and download into the current directory the newest available version of that source package while respecting the default release, set with the option APT::Default-Release, the -t option or per package with the pkg/release syntax, if possible.
 
 > sudo apt-get source neofetch
+
+<hr>
 
 15. **lshw**
 

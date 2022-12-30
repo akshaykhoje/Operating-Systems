@@ -1,0 +1,5 @@
+bless
+strip
+objdump
+strings
+readelf
