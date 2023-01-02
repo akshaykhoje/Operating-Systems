@@ -10,7 +10,7 @@
 - Learn Linux commands:  file, objdump, hexdump, ifconfig, ping, gdb, lspci, lsusb, dmesg, mkfs, fdisk, gparted,  apt install, apt-get source, lshw, lsmod, lsblk, lsof, netstat, iostat, ecryptfs, mount, wget, w3m,  adduser, id, ld,
 - Read the following manual pages:  cat, head, printf, lseek (and open, read, write), exit
   which purpose the following files serve on Linux?
-    - /etc/fstab  /etc/nsswitch.conf  /etc/resolv.conf  /var/log/apache2/error.log   /proc/cpuinfo /proc/partitions  /proc/uptime /proc/version  /boot/vmlinuz /boot/grub/grub.lst  /usr/lib/x86_64-linux-gnu/libc.so.6 /snap  /dev/sda /dev/nvme0  /dev/sda2 /dev/null /dev/zero   /etc/passwd /etc/shadow
+    - /etc/fstab    /etc/nsswitch.conf      /etc/resolv.conf    /var/log/apache2/error.log      /proc/cpuinfo   /proc/partitions    /proc/uptime    /proc/version   /boot/vmlinuz   /boot/grub/grub.lst     /usr/lib/x86_64-linux-gnu/libc.so.6     /snap       /dev/sda    /dev/nvme0      /dev/sda2       /dev/null /dev/zero     /etc/passwd       /etc/shadow
 - Answer following questions
     - What is a .a file and a .so file? How are they different?
     - How to create a  .a file and a .so file ?
