@@ -1,0 +1,2 @@
+The code is taken from here : 
+https://cboard.cprogramming.com/c-programming/177447-jpeg-header.html

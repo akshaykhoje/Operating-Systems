@@ -22,7 +22,6 @@ void create(ll *rootptr, int x)
         nn->data = x;
         nn->next = NULL;
         *rootptr = nn;
-        printf("data : %d\n", (*rootptr)->data);
     }
     else
     {
@@ -105,4 +104,5 @@ ll search(ll rootptr, int n) {
     }
     if(temp->data == n)
         return temp;
+    return NULL;
 }
