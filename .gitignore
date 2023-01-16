@@ -3,5 +3,5 @@
 *.out
 *.elf
 .vscode
-./abhijit/*
+abhijit/
 ANSI_C.pdf
