@@ -3,12 +3,17 @@
 #include <unistd.h>
 #include <string.h>
 #include <fcntl.h>
-#include <sys/stat.h>
 #include <sys/types.h>
+#include <sys/stat.h>
 #include <sys/wait.h>
 #define SIZE 128
 #define YELLOW printf("\033[0;33m");
 #define DEFAULT printf("\033[0m");
+
+void redirection(char **args, int token_size, char *path)
+{
+    int fd, i = 0;
+}
 
 void change_dir(char *new_dir_path, char *curr_dir)
 {
@@ -19,12 +24,13 @@ void change_dir(char *new_dir_path, char *curr_dir)
 
 void set_ps1(char buf[], char *value_ps1)
 {
+    char temp_buf[SIZE];
+    strcpy(temp_buf, buf);
     char *token = (char *)malloc(sizeof(char) * strlen(value_ps1));
-    token = strtok(buf, "\"");
+    token = strtok(temp_buf, "\"");
     if (strcmp(token, "\\w$") == 0)
     {
         getcwd(value_ps1, 2 * SIZE);
-        printf("value_ps1 when \\w$", value_ps1);
     }
     else
     {
@@ -33,24 +39,6 @@ void set_ps1(char buf[], char *value_ps1)
     token = NULL;
     free(token);
     return;
-}
-
-char *command_path(char **path, char **args, int token_size)
-{
-    char **temp = path; // local pointer to point to PATH
-    char *check_unit = (char *)malloc(sizeof(char) * SIZE);
-    while (*temp != NULL)
-    {
-        memset(check_unit, 0, SIZE);
-        strcpy(check_unit, *temp);
-        strcat(check_unit, *args);
-        if (open(check_unit, O_RDONLY) >= 0)
-        {
-            return check_unit;
-        }
-        temp = temp + 1;
-    }
-    return NULL;
 }
 
 char **extract_input(char buf[], int *ps1_flag, int *size)
@@ -102,11 +90,34 @@ char **extract_input(char buf[], int *ps1_flag, int *size)
     }
 }
 
+char *command_path(char **path, char **args, int token_size, int redirect)
+{
+    // int i=0;
+    // if(redirect == 1)
+    //     token_size = token_size - 2;
+    char **temp = path;
+    char *check_unit = (char *)malloc(sizeof(char) * 128);
+    while (*temp != NULL)
+    {
+        strcpy(check_unit, *temp);
+        strcat(check_unit, *args);
+        printf("temp : %s\n", check_unit);
+        if (open(check_unit, O_RDONLY) >= 0)
+        {
+            return check_unit;
+        }
+        temp = temp + 1;
+    }
+    free(check_unit);
+    return NULL;
+}
+
 int main(void)
 {
-    int pid, token_size = 0;
-    char *cmd_path;
-    char input_buffer[SIZE];
+    int pid;
+    int token_size = 0;
+    char *cmd_path;         // points to the address of the executable
+    char input_buffer[SIZE];  // stores the user input
     char curr_dir[2 * SIZE];  // stores path of the current directory
     char **extraction = NULL; // points to an array of tokenized user input
     char *PATH[2 * SIZE] = {"/usr/bin/", "/usr/local/bin/", "/bin/", "/usr/local/games/", "/usr/games/", "/snap/bin/"};
@@ -125,18 +136,26 @@ int main(void)
         input_buffer[strcspn(input_buffer, "\n")] = 0; // to remove the trailing '\n' character in input_buffer
 
         extraction = extract_input(input_buffer, &ps1_flag, &token_size);
-        
+
         if (ps1_flag == 1)
         {
             set_ps1(input_buffer + 5, curr_dir);
+            printf("pwd inside main : %s\n", curr_dir);
         }
         else if (strcmp(*extraction, "cd") == 0)
         {
             change_dir(*(extraction + 1), curr_dir);
         }
+        // printf("redi... : %s\n", *(extraction + token_size - 2));
+        else if ((strcmp(*(extraction + token_size - 2), ">") == 0) || strcmp(*(extraction + token_size - 2), "<") == 0)
+        {
+            printf("redirecting!\n");
+            cmd_path = command_path(PATH, extraction, token_size, 1);
+            redirection(extraction, token_size, cmd_path);
+        }
         else
         {
-            cmd_path = command_path(PATH, extraction, token_size);
+            cmd_path = command_path(PATH, extraction, token_size, 0);
         }
 
         pid = fork();
@@ -150,5 +169,9 @@ int main(void)
         }
     }
 
+    extraction = NULL;
+    cmd_path = NULL;
+    free(cmd_path);
+    free(extraction);
     return 0;
 }
