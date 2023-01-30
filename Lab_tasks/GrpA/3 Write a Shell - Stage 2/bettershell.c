@@ -102,10 +102,33 @@ char **extract_input(char buf[], int *ps1_flag, int *size)
     }
 }
 
+void create_history(char input[])
+{
+    int history = open("bsh_history", O_CREAT | O_APPEND | O_RDWR);
+    char hist_buffer[SIZE];
+    strcpy(hist_buffer, input);
+    int i = 0;
+    while (hist_buffer[i] != '\n')
+    {
+        i++;
+    }
+    write(history, hist_buffer, i);
+    write(history, "\n", 1);
+    close(history);
+    return;
+}
+
+void history()
+{
+    execl("/usr/bin/cat", "/usr/bin/cat", "bsh_history", NULL);
+    return;
+}
+
 int main(void)
 {
     int pid, token_size = 0;
     char *cmd_path;
+    int fd_history;
     char input_buffer[SIZE];
     char curr_dir[2 * SIZE];  // stores path of the current directory
     char **extraction = NULL; // points to an array of tokenized user input
@@ -121,11 +144,13 @@ int main(void)
         printf("%s", curr_dir);
         DEFAULT
         printf("$ ");
+        char *history_buffer = (char *)malloc(sizeof(char) * SIZE);
         fgets(input_buffer, SIZE, stdin);
+        create_history(input_buffer);
         input_buffer[strcspn(input_buffer, "\n")] = 0; // to remove the trailing '\n' character in input_buffer
 
         extraction = extract_input(input_buffer, &ps1_flag, &token_size);
-        
+
         if (ps1_flag == 1)
         {
             set_ps1(input_buffer + 5, curr_dir);
@@ -134,12 +159,21 @@ int main(void)
         {
             change_dir(*(extraction + 1), curr_dir);
         }
+        else if (strcmp(*extraction, "history") == 0)
+        {
+            history();
+        }
         else
         {
             cmd_path = command_path(PATH, extraction, token_size);
         }
+        // create_history(input_buffer);
 
         pid = fork();
+        if (pid < 0)
+        {
+            return 1;
+        }
         if (pid == 0)
         {
             execv(cmd_path, extraction);
