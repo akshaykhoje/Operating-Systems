@@ -124,6 +124,16 @@ void history()
     return;
 }
 
+void handle_sigterm(int sig)
+{
+    printf("Caught signal %d\n", sig);
+}
+
+void handle_sigstop(int sig)
+{
+    printf("Caught signal %d\n", sig);
+}
+
 int main(void)
 {
     int pid, token_size = 0;
@@ -133,6 +143,10 @@ int main(void)
     char curr_dir[2 * SIZE];  // stores path of the current directory
     char **extraction = NULL; // points to an array of tokenized user input
     char *PATH[2 * SIZE] = {"/usr/bin/", "/usr/local/bin/", "/bin/", "/usr/local/games/", "/usr/games/", "/snap/bin/"};
+
+    // adding signal to quit using ctrl+C
+    signal(SIGTERM, handle_sigterm);
+    signal(SIGSTOP, handle_sigstop);
 
 #pragma flags
     int ps1_flag = 0;
@@ -146,6 +160,10 @@ int main(void)
         printf("$ ");
         char *history_buffer = (char *)malloc(sizeof(char) * SIZE);
         fgets(input_buffer, SIZE, stdin);
+        if (input_buffer[0] == '\n') // if user presses enter, skip this iteration!
+        {
+            continue;
+        }
         create_history(input_buffer);
         input_buffer[strcspn(input_buffer, "\n")] = 0; // to remove the trailing '\n' character in input_buffer
 
@@ -167,7 +185,6 @@ int main(void)
         {
             cmd_path = command_path(PATH, extraction, token_size);
         }
-        // create_history(input_buffer);
 
         pid = fork();
         if (pid < 0)
