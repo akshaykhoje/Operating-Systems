@@ -1,0 +1,19 @@
+total 50K
+sadfsdf asdf ljk
+ asldkf asd
+fa skjldf ar
+ qweiur 
+v afsdf uioa f
+-rwxrwxrwx 1 root root    0 Apr  5 21:55 data.txt
+-rwxrwxrwx 1 root root 9.7K Apr  5 21:52 shell.s
+flaskdfa sdf
+-rwxrwxrwx 1 root root  18K Apr  5 21:52 shell
+fsadljkf
+-rwxrwxrowx 1 root root   71 Feb  9 15:54 new.txt
+iuwet
+-rwxrwxrwx 1 root root 4.4K Jan 24 22:16 shell.c
+pppqerw
+-rwxrwxrwx 1 root root   93 Jan 24 22:01 Makefile
+-rwxrwxrwx 1 root root   29 Jan 24 21:52 try.c
+-rwxrwxrwx 1 root root 2.3K Jan 21 14:30 old_shell.c
+-rwxrwxrwx 1 root root 1.6K Jan 17 21:20 task.txt

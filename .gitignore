@@ -4,4 +4,8 @@
 *.elf
 .vscode
 abhijit/
-ANSI_C.pdf
+mock_ese/
+quizzes/
+threads/
+kernels/
+

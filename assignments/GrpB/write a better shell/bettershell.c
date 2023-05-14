@@ -10,6 +10,52 @@
 #define YELLOW printf("\033[0;33m");
 #define DEFAULT printf("\033[0m");
 
+int no_of_pipes = 0;
+
+int check_for_pipe(char **extraction)
+{
+    char **temp = extraction;
+    while (*temp != NULL)
+    {
+        if (strcmp(*temp, "|") == 0)
+        {
+            no_of_pipes++;
+        }
+        temp++;
+    }
+    return no_of_pipes;
+}
+
+char ***extract_pipe_commands(char **extraction)        // extract each command into an array(3D) element
+{
+    char **temp = extraction;
+    char ***commands = (char ***)malloc(sizeof(char **) * (no_of_pipes + 1));
+    int i = 0;
+    for (i = 0; i < no_of_pipes + 1; i++)
+    {
+        commands[i] = (char **)malloc(sizeof(char *) * SIZE);
+    }
+    int j = 0, k = 0;
+    while (*temp != NULL)
+    {
+        if (strcmp(*temp, "|") == 0)
+        {
+            commands[j][k] = NULL;
+            j++;
+            k = 0;
+        }
+        else
+        {
+            commands[j][k] = *temp;
+            printf("%s\n", *temp);
+            k++;
+        }
+        temp++;
+    }
+    return commands;        // returns all the commands between each pipes
+}
+
+
 void change_dir(char *new_dir_path, char *curr_dir)
 {
     chdir(new_dir_path);
@@ -169,6 +215,19 @@ int main(void)
 
         extraction = extract_input(input_buffer, &ps1_flag, &token_size);
 
+        int pipes = check_for_pipe(extraction);
+        if (pipes != 0)
+        {
+            printf("no of pipes : %d\n", no_of_pipes);
+            char ***commands = extract_pipe_commands(extraction);
+            // int size = 0;
+            while (*commands != NULL)
+            {
+                printf("%s\n", *commands);
+                commands++;
+            }
+            return 0;
+        }
         if (ps1_flag == 1)
         {
             set_ps1(input_buffer + 5, curr_dir);

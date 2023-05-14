@@ -1,0 +1,10 @@
+.
+..
+Makefile
+new.txt
+old_shell.c
+shell
+shell.c
+shell.s
+task.txt
+try.c
